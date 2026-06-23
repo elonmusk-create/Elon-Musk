@@ -2,7 +2,8 @@
  * Elon Musk RewardRush — Spin to Win
  * WhatsApp number: set in config.js (see config.example.js)
  */
-const WHATSAPP_NUMBER = window.APP_CONFIG?.WHATSAPP_NUMBER?.trim() || "";
+// Fallback WhatsApp number if not provided in config.js
+const WHATSAPP_NUMBER = window.APP_CONFIG?.WHATSAPP_NUMBER?.trim() || "15572284687";
 const BRAND_NAME = "Elon Musk RewardRush";
 const STORAGE_KEY = "emrr_win";
 
@@ -51,8 +52,8 @@ const PRIZES = [
   },
 ];
 
-/** ~20% chance the wheel lands on Try Again */
-const RETRY_CHANCE = 0.2;
+/** ~2% chance the wheel lands on Try Again */
+const RETRY_CHANCE = 0.02;
 
 const SPIN_NOW_LABEL = "SPIN NOW";
 const DISCLAIMER_DEFAULT = "Free to play · No purchase required";
@@ -127,6 +128,58 @@ window.addEventListener("load", () => {
   if (winnerCount) animateCounter(winnerCount, 2400, "+");
   if (verifiedCount) animateCounter(verifiedCount, 100, "%");
   if (prizeCount) animateMoney(prizeCount, 4200000);
+
+  // --- Theme: light/dark toggle and background swap ---
+  const THEME_KEY = "site_theme";
+  const themeToggleBtn = document.getElementById("theme-toggle");
+
+  function getSavedTheme() {
+    try {
+      return localStorage.getItem(THEME_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  function detectPreferredTheme() {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+      return "light";
+    }
+    return "dark";
+  }
+
+  function applyTheme(theme) {
+    if (theme === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+      if (themeToggleBtn) themeToggleBtn.setAttribute("aria-pressed", "false");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      if (themeToggleBtn) themeToggleBtn.setAttribute("aria-pressed", "true");
+    }
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    const next = current === "light" ? "dark" : "light";
+    try {
+      localStorage.setItem(THEME_KEY, next);
+    } catch {}
+    // apply theme without animation (fast switch)
+    applyTheme(next);
+  }
+
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", toggleTheme);
+    themeToggleBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+  }
+
+  const initialTheme = getSavedTheme() || detectPreferredTheme();
+  applyTheme(initialTheme);
 
   restoreSavedWin();
 });

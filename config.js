@@ -1,0 +1,3 @@
+window.APP_CONFIG = {
+  WHATSAPP_NUMBER: "15572284687",
+};

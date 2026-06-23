@@ -46,15 +46,149 @@ body {
   content: "";
   position: absolute;
   inset: 0;
+  /* Softer overlay so background image shines through more */
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.82) 45%, rgba(0, 0, 0, 0.97) 100%),
-    radial-gradient(ellipse at 50% 30%, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.75) 70%);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.6) 45%, rgba(0, 0, 0, 0.85) 100%),
+    radial-gradient(ellipse at 50% 30%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.45) 70%);
 }
 
 .page {
   max-width: 720px;
   margin: 0 auto;
   padding: 2.5rem 1.25rem 3rem;
+}
+
+/* Theme variants */
+html[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-card: #ffffff;
+  --text: #ffffff;
+  --text-muted: #475569;
+  --border: #e6e7eb;
+  --gold-dim: rgba(250, 204, 21, 0.08);
+}
+
+html[data-theme="light"] .page-bg {
+  background: #f8fafc url("assets/front.jpg") center / cover no-repeat;
+}
+
+html:not([data-theme="light"]) .page-bg {
+  background: #000 url("assets/background.jpg") center / cover no-repeat;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10010;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.15s ease, transform 0.12s ease;
+  opacity: 0.9;
+}
+
+.theme-toggle:active {
+  transform: scale(0.98);
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.theme-icon {
+  position: absolute;
+  font-size: 18px;
+  line-height: 1;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+html[data-theme="light"] .theme-toggle {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+}
+
+/* Make toggle smaller and less distracting on small screens */
+@media (max-width: 640px) {
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    top: 12px;
+    right: 12px;
+    opacity: 0.75;
+  }
+  .theme-icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    top: auto;
+    right: 10px;
+    bottom: 12px;
+    opacity: 0.7;
+  }
+  .theme-icon {
+    font-size: 14px;
+  }
+}
+
+/* Increase background image 'shine' by slightly boosting brightness/saturation */
+.page-bg {
+  filter: contrast(1.04) saturate(1.06) brightness(1.03);
+}
+
+/* Add a subtle centered highlight to make the hero area pop */
+.page-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px 400px at 50% 30%, rgba(255,255,255,0.04), rgba(255,255,255,0) 30%);
+  pointer-events: none;
+}
+
+/* Temporary animation state applied during theme toggle */
+/* Ensure hero heading remains white regardless of theme */
+.hero-title {
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] .theme-icon-sun {
+  opacity: 1;
+  transform: scale(1);
+}
+
+html[data-theme="light"] .theme-icon-moon {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+html:not([data-theme="light"]) .theme-icon-sun {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+html:not([data-theme="light"]) .theme-icon-moon {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Hero */
