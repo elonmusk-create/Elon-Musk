@@ -129,58 +129,6 @@ window.addEventListener("load", () => {
   if (verifiedCount) animateCounter(verifiedCount, 100, "%");
   if (prizeCount) animateMoney(prizeCount, 4200000);
 
-  // --- Theme: light/dark toggle and background swap ---
-  const THEME_KEY = "site_theme";
-  const themeToggleBtn = document.getElementById("theme-toggle");
-
-  function getSavedTheme() {
-    try {
-      return localStorage.getItem(THEME_KEY);
-    } catch {
-      return null;
-    }
-  }
-
-  function detectPreferredTheme() {
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-      return "light";
-    }
-    return "dark";
-  }
-
-  function applyTheme(theme) {
-    if (theme === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-      if (themeToggleBtn) themeToggleBtn.setAttribute("aria-pressed", "false");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-      if (themeToggleBtn) themeToggleBtn.setAttribute("aria-pressed", "true");
-    }
-  }
-
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
-    const next = current === "light" ? "dark" : "light";
-    try {
-      localStorage.setItem(THEME_KEY, next);
-    } catch {}
-    // apply theme without animation (fast switch)
-    applyTheme(next);
-  }
-
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener("click", toggleTheme);
-    themeToggleBtn.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        toggleTheme();
-      }
-    });
-  }
-
-  const initialTheme = getSavedTheme() || detectPreferredTheme();
-  applyTheme(initialTheme);
-
   restoreSavedWin();
 });
 
