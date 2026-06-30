@@ -1,9 +1,9 @@
 /**
  * Elon Musk RewardRush — Spin to Win
- * WhatsApp number: set in config.js (see config.example.js)
+ * Telegram username: set in config.js (see config.example.js)
  */
-// Fallback WhatsApp number if not provided in config.js
-const WHATSAPP_NUMBER = window.APP_CONFIG?.WHATSAPP_NUMBER?.trim() || "15572284687";
+// Fallback Telegram username if not provided in config.js
+const TELEGRAM_USERNAME = window.APP_CONFIG?.TELEGRAM_USERNAME?.trim() || "@kated356";
 const BRAND_NAME = "Elon Musk RewardRush";
 const STORAGE_KEY = "emrr_win";
 
@@ -115,9 +115,9 @@ function animateMoney(element, target) {
 }
 
 window.addEventListener("load", () => {
-  if (!WHATSAPP_NUMBER) {
+  if (!TELEGRAM_USERNAME) {
     console.warn(
-      "[RewardRush] Missing WHATSAPP_NUMBER. Copy config.example.js to config.js and set your number."
+      "[RewardRush] Missing TELEGRAM_USERNAME. Copy config.example.js to config.js and set your username."
     );
   }
 
@@ -232,7 +232,7 @@ function generateClaimCode() {
   return code;
 }
 
-function buildWhatsAppUrl(prize, code) {
+function buildTelegramUrl(prize, code) {
   const text = [
     `Hi! I'd like to claim my ${BRAND_NAME} win.`,
     "",
@@ -240,10 +240,10 @@ function buildWhatsAppUrl(prize, code) {
     `Prize: ${prize.name}`,
     `Value: ${prize.value}`,
     `Claim Code: ${code}`,
-  ].join("\n");
+  ].join("%0A");
 
-  const number = WHATSAPP_NUMBER || "0";
-  return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+  const username = TELEGRAM_USERNAME || "@kated356";
+  return `https://t.me/${username.replace("@", "")}?text=${text}`;
 }
 
 function saveWin(prize, code) {
@@ -422,7 +422,7 @@ function showWinModal(prize, code, { withConfetti = false } = {}) {
   modalTitle.textContent = prize.name;
   modalValue.textContent = prize.value;
   modalCode.textContent = code;
-  modalClaim.href = buildWhatsAppUrl(prize, code);
+  modalClaim.href = buildTelegramUrl(prize, code);
 
   openModalOverlay();
 
