@@ -6,7 +6,8 @@
     return;
   }
 
-  const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // Use the UMD global `supabase` (not supabaseJs)
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // Elements
   const telegramInput = document.getElementById("telegram-username");
@@ -26,7 +27,7 @@
 
     if (error) {
       console.error(error);
-      saveStatus.textContent = "Failed to load settings";
+      saveStatus.textContent = "Failed to load settings: " + (error.message || error);
       return;
     }
     const row = data?.[0];
@@ -52,7 +53,7 @@
       .limit(1);
 
     if (error) {
-      saveStatus.textContent = "Error reading settings";
+      saveStatus.textContent = "Error reading settings: " + (error.message || error);
       return;
     }
 
@@ -85,6 +86,8 @@
       }
       saveStatus.textContent = "Saved";
     }
+
+    // Optionally notify the page or caller that settings changed. We can't update index.html automatically across clients.
   });
 
   // initial load

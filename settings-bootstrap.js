@@ -4,7 +4,8 @@
   const SUPABASE_ANON_KEY = window.APP_CONFIG?.SUPABASE_ANON_KEY;
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
   try {
-    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Use the UMD global `supabase` (not supabaseJs)
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const { data } = await supabase
       .from("settings")
       .select("*")
