@@ -4,45 +4,36 @@
   <meta charset="utf-8" />
   <title>Admin — Contact Settings</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    body { font-family: system-ui, Arial; max-width:800px; margin:2rem auto; padding:1rem;}
-    label { display:block; margin-top:1rem; }
-    input[type="text"] { width:100%; padding:.5rem; }
-    .row { display:flex; gap:1rem; align-items:center; margin-top:.5rem; }
-    .btn { padding:.6rem 1rem; margin-top:1rem; cursor:pointer; }
-    .btn-primary { background:#0077ff;color:#fff;border:none; }
-    .status { margin-top:1rem; color:green; }
+    /* Small override to keep admin panel compact */
+    .admin-card { max-width: 680px; margin: 1.25rem auto; }
+    .status { margin-left: 0.5rem; color: var(--gold-text); }
   </style>
 </head>
 <body>
-  <h1>Admin Panel — Contact Settings (no sign-in)</h1>
+  <main class="admin-panel">
+    <div class="admin-card">
+      <h1 style="margin-bottom:.5rem">Admin — Contact Settings</h1>
+      <p style="color:#b00; font-size:.95rem;">Warning: This admin page is not authenticated. Keep the URL private in production.</p>
 
-  <p style="color:#b00;">Warning: This admin page allows anyone who can access it to change site settings. Do not expose the URL publicly if you care about security.</p>
+      <form id="settings-form" class="admin-form" onsubmit="return false;">
+        <label style="grid-column:1 / -1">
+          Telegram username
+          <input id="telegram-username" type="text" placeholder="@username" />
+          <small style="display:block; color:var(--text-faint); margin-top:6px">Enter a Telegram username (with or without @). The Telegram claim button will always be shown; if you leave this blank the button will be visible but disabled until you add a username.</small>
+        </label>
 
-  <form id="settings-form">
-    <label>
-      <input type="checkbox" id="show-telegram" /> Show Telegram
-    </label>
+        <div style="grid-column:1 / -1" class="admin-actions">
+          <button id="btn-save" class="btn btn-primary" type="button">Save settings</button>
+          <span id="save-status" class="status"></span>
+        </div>
+      </form>
 
-    <label>
-      Telegram username
-      <input id="telegram-username" type="text" placeholder="@username" />
-    </label>
-
-    <label>
-      <input type="checkbox" id="show-whatsapp" /> Show WhatsApp
-    </label>
-
-    <label>
-      WhatsApp number
-      <input id="whatsapp-number" type="text" placeholder="+1234567890" />
-    </label>
-
-    <div class="row">
-      <button id="btn-save" class="btn btn-primary" type="button">Save settings</button>
-      <span id="save-status" class="status"></span>
+      <hr style="margin-top:1rem; opacity:.08" />
+      <p style="font-size:0.9rem; color:var(--text-faint);">Live preview of the claim button appears on the public page. Changes are saved to the database and apply to the public site (polling or realtime dependent on configuration).</p>
     </div>
-  </form>
+  </main>
 
   <script src="config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
