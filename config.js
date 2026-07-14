@@ -1,3 +1,3 @@
 window.APP_CONFIG = {
-  TELEGRAM_USERNAME: "@kated356",
+  TELEGRAM_USERNAME: "@rocketmanmuskt02",
 };
