@@ -31,9 +31,6 @@
 
       <h1 class="hero-title shimmer">Spin. Win Big.</h1>
       <p class="elon-quote">"The future is electric. Spin and win your reward" — Elon Musk.</p>
-      <!-- <button type="button" class="btn btn-primary btn-hero" id="btn-scroll-spin"> -->
-      <!-- <span class="btn-icon" aria-hidden="true">▷</span> SPIN TO WIN -->
-      <!-- </button> -->
 
       <div class="stats-bar">
         <div class="stat">
@@ -104,9 +101,10 @@
           <img src="assets/ppf.jpg" alt="Elon Musk" class="modal-signature__img" width="36" height="36" />
           <p class="modal-signature__text">Signed by Elon Musk · Tesla CEO</p>
         </div>
-        <a id="modal-claim" class="btn btn-primary btn-claim" href="#" target="_blank" rel="noopener noreferrer">
-          Claim on Telegram
-        </a>
+        <div id="claim-buttons">
+          <a id="modal-claim-tg" class="btn btn-primary btn-claim" href="#" target="_blank" rel="noopener noreferrer">Claim on Telegram</a>
+          <a id="modal-claim-wa" class="btn btn-primary btn-claim" href="#" target="_blank" rel="noopener noreferrer" hidden>Contact on WhatsApp</a>
+        </div>
         <button type="button" id="modal-retry-win-btn" class="btn btn-secondary">
           Try Again — spin for another prize
         </button>
@@ -138,6 +136,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="settings-bootstrap.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

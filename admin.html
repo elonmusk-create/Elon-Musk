@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin — Contact Settings</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, Arial; max-width:800px; margin:2rem auto; padding:1rem;}
+    label { display:block; margin-top:1rem; }
+    input[type="text"] { width:100%; padding:.5rem; }
+    .row { display:flex; gap:1rem; align-items:center; margin-top:.5rem; }
+    .btn { padding:.6rem 1rem; margin-top:1rem; cursor:pointer; }
+    .btn-primary { background:#0077ff;color:#fff;border:none; }
+    .btn-logout { background:#eee;border:1px solid #ccc; }
+    .status { margin-top:1rem; color:green; }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel — Contact Settings</h1>
+
+  <div id="auth-area">
+    <div id="signed-out">
+      <p>Sign in to manage settings.</p>
+      <input id="email" type="text" placeholder="Email for magic link" />
+      <button id="btn-signin" class="btn btn-primary">Send Magic Link</button>
+    </div>
+
+    <div id="signed-in" hidden>
+      <p>Signed in as <span id="user-email"></span></p>
+      <button id="btn-logout" class="btn btn-logout">Log out</button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <form id="settings-form" hidden>
+    <label>
+      <input type="checkbox" id="show-telegram" /> Show Telegram
+    </label>
+
+    <label>
+      Telegram username
+      <input id="telegram-username" type="text" placeholder="@username" />
+    </label>
+
+    <label>
+      <input type="checkbox" id="show-whatsapp" /> Show WhatsApp
+    </label>
+
+    <label>
+      WhatsApp number
+      <input id="whatsapp-number" type="text" placeholder="+1234567890" />
+    </label>
+
+    <div class="row">
+      <button id="btn-save" class="btn btn-primary" type="button">Save settings</button>
+      <span id="save-status" class="status"></span>
+    </div>
+  </form>
+
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
