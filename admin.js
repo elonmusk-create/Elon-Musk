@@ -28,24 +28,49 @@
     if (error) {
       console.error(error);
       saveStatus.textContent = "Failed to load settings: " + (error.message || error);
-      return;
-    }
-    const row = data?.[0];
-    if (!row) {
+      // Even on read error, ensure at least one option is selected so a button shows
       telegramInput.value = window.APP_CONFIG.TELEGRAM_USERNAME || "";
       whatsappInput.value = "";
       showTelegram.checked = true;
       showWhatsapp.checked = false;
       return;
     }
-    telegramInput.value = row.telegram_username || "";
+    const row = data?.[0];
+    if (!row) {
+      // No stored settings: prefer showing Telegram by default
+      telegramInput.value = window.APP_CONFIG.TELEGRAM_USERNAME || "";
+      whatsappInput.value = "";
+      showTelegram.checked = true;
+      showWhatsapp.checked = false;
+      return;
+    }
+
+    // Populate inputs from DB but ensure at least one contact option is enabled
+    telegramInput.value = row.telegram_username || window.APP_CONFIG.TELEGRAM_USERNAME || "";
     whatsappInput.value = row.whatsapp_number || "";
-    showTelegram.checked = !!row.show_telegram;
-    showWhatsapp.checked = !!row.show_whatsapp;
+    // coerce to boolean
+    const tg = !!row.show_telegram;
+    const wa = !!row.show_whatsapp;
+
+    if (!tg && !wa) {
+      // don't use old data if it would leave both unchecked — force Telegram on
+      showTelegram.checked = true;
+      showWhatsapp.checked = false;
+    } else {
+      showTelegram.checked = tg;
+      showWhatsapp.checked = wa;
+    }
   }
 
   btnSave.addEventListener("click", async () => {
     saveStatus.textContent = "Saving...";
+
+    // enforce at least one selected
+    if (!showTelegram.checked && !showWhatsapp.checked) {
+      // default to Telegram if admin accidentally unchecks both
+      showTelegram.checked = true;
+    }
+
     const { data, error } = await supabase
       .from("settings")
       .select("*")
@@ -65,29 +90,29 @@
       updated_at: new Date().toISOString()
     };
 
-    if (data && data.length > 0) {
-      const id = data[0].id;
-      const { error: updateErr } = await supabase
-        .from("settings")
-        .update(payload)
-        .eq("id", id);
-      if (updateErr) {
-        saveStatus.textContent = "Update failed: " + updateErr.message;
-        return;
+    try {
+      if (data && data.length > 0) {
+        const id = data[0].id;
+        const { error: updateErr } = await supabase
+          .from("settings")
+          .update(payload)
+          .eq("id", id);
+        if (updateErr) throw updateErr;
+      } else {
+        const { error: insertErr } = await supabase
+          .from("settings")
+          .insert(payload);
+        if (insertErr) throw insertErr;
       }
-      saveStatus.textContent = "Saved";
-    } else {
-      const { error: insertErr } = await supabase
-        .from("settings")
-        .insert(payload);
-      if (insertErr) {
-        saveStatus.textContent = "Insert failed: " + insertErr.message;
-        return;
-      }
-      saveStatus.textContent = "Saved";
-    }
 
-    // Optionally notify the page or caller that settings changed. We can't update index.html automatically across clients.
+      // reload so inputs reflect canonical stored state
+      await loadSettings();
+      saveStatus.textContent = "Saved";
+      setTimeout(() => (saveStatus.textContent = ""), 2500);
+    } catch (err) {
+      console.error(err);
+      saveStatus.textContent = "Save failed: " + (err.message || JSON.stringify(err));
+    }
   });
 
   // initial load

@@ -16,29 +16,43 @@
 
     const TELEGRAM_USERNAME = (remote?.telegram_username?.trim())
       || window.APP_CONFIG?.TELEGRAM_USERNAME?.trim()
-      || "@kated356";
+      || ""; // allow empty
 
     const SHOW_TELEGRAM = remote?.show_telegram ?? true;
     const SHOW_WHATSAPP = remote?.show_whatsapp ?? false;
     const WHATSAPP_NUMBER = remote?.whatsapp_number?.trim() || "";
 
-    // update modal telegram button
+    // update modal telegram button: show based on flag only
     const tgBtn = document.getElementById("modal-claim-tg");
     if (tgBtn) {
-      if (SHOW_TELEGRAM && TELEGRAM_USERNAME) {
-        tgBtn.href = `https://t.me/${TELEGRAM_USERNAME.replace(/^@/, "")}`;
+      if (SHOW_TELEGRAM) {
+        // show the button even if username is empty
         tgBtn.hidden = false;
+        if (TELEGRAM_USERNAME) {
+          tgBtn.href = `https://t.me/${TELEGRAM_USERNAME.replace(/^@/, "")}`;
+          tgBtn.classList.remove('btn-claim--empty');
+        } else {
+          // no username yet — show visually but disable clicking
+          tgBtn.href = "#";
+          tgBtn.classList.add('btn-claim--empty');
+        }
       } else {
         tgBtn.hidden = true;
       }
     }
 
-    // update whatsapp button
+    // update whatsapp button: show based on flag only
     const waBtn = document.getElementById("modal-claim-wa");
     if (waBtn) {
-      if (SHOW_WHATSAPP && WHATSAPP_NUMBER) {
-        waBtn.href = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
+      if (SHOW_WHATSAPP) {
         waBtn.hidden = false;
+        if (WHATSAPP_NUMBER) {
+          waBtn.href = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`;
+          waBtn.classList.remove('btn-claim--empty');
+        } else {
+          waBtn.href = "#";
+          waBtn.classList.add('btn-claim--empty');
+        }
       } else {
         waBtn.hidden = true;
       }
