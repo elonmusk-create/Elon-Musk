@@ -11,29 +11,15 @@
     .row { display:flex; gap:1rem; align-items:center; margin-top:.5rem; }
     .btn { padding:.6rem 1rem; margin-top:1rem; cursor:pointer; }
     .btn-primary { background:#0077ff;color:#fff;border:none; }
-    .btn-logout { background:#eee;border:1px solid #ccc; }
     .status { margin-top:1rem; color:green; }
   </style>
 </head>
 <body>
-  <h1>Admin Panel — Contact Settings</h1>
+  <h1>Admin Panel — Contact Settings (no sign-in)</h1>
 
-  <div id="auth-area">
-    <div id="signed-out">
-      <p>Sign in to manage settings.</p>
-      <input id="email" type="text" placeholder="Email for magic link" />
-      <button id="btn-signin" class="btn btn-primary">Send Magic Link</button>
-    </div>
+  <p style="color:#b00;">Warning: This admin page allows anyone who can access it to change site settings. Do not expose the URL publicly if you care about security.</p>
 
-    <div id="signed-in" hidden>
-      <p>Signed in as <span id="user-email"></span></p>
-      <button id="btn-logout" class="btn btn-logout">Log out</button>
-    </div>
-  </div>
-
-  <hr/>
-
-  <form id="settings-form" hidden>
+  <form id="settings-form">
     <label>
       <input type="checkbox" id="show-telegram" /> Show Telegram
     </label>

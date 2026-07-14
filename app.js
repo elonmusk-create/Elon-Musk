@@ -75,7 +75,9 @@ const modalTitle = document.getElementById("modal-title");
 const modalValue = document.getElementById("modal-value");
 const modalCode = document.getElementById("modal-code");
 const modalCodeBlock = document.getElementById("modal-code-block");
-const modalClaim = document.getElementById("modal-claim");
+// updated: reference both claim buttons if present
+const modalClaimTg = document.getElementById("modal-claim-tg") || document.getElementById("modal-claim");
+const modalClaimWa = document.getElementById("modal-claim-wa");
 const modalRetryBtn = document.getElementById("modal-retry-btn");
 const modalRetryWinBtn = document.getElementById("modal-retry-win-btn");
 const modalSignature = document.getElementById("modal-signature");
@@ -422,7 +424,10 @@ function showWinModal(prize, code, { withConfetti = false } = {}) {
   modalTitle.textContent = prize.name;
   modalValue.textContent = prize.value;
   modalCode.textContent = code;
-  modalClaim.href = buildTelegramUrl(prize, code);
+  // updated: set Telegram claim on the TG button if present
+  if (modalClaimTg) {
+    modalClaimTg.href = buildTelegramUrl(prize, code);
+  }
 
   openModalOverlay();
 
